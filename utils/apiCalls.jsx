@@ -18,7 +18,7 @@ export async function logIn(payload) {
                     type: "DO_LOGIN_SUCCESS", payload: user.data()
             });
             } else {
-                alert("User does not exist. Please try again.");
+                alert("NO NO DIVESTED BLACK WOMEN ALLOWED");
             }
         }).catch(function(error) {
             const { code, message } = error;
@@ -33,11 +33,14 @@ export async function handlePasswordReset(values) {
     const { email } = values
     try {
         await this.props.f.passwordReset(email)
-        console.log('Password reset email sent successfully')
+        alert('Password reset email sent successfully')
         this.props.navigation.navigate('Login')
     } catch (error) {
         alert(error)
     }
+}
+export function logOut(){
+    f.auth().signOut();
 }
 
 connect(store => {

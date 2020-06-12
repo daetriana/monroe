@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 
 export default class Login2 extends Component {
-  render() {
+render() {
     return (
         <View style = {styles.container}>
 

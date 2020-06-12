@@ -39,7 +39,6 @@ import { connect } from "react-redux";
         loginStatus: store.login.loginStatus
     };
 })
-
 export default class LoginScreen extends Component {
     constructor(props) {
         super(props);
@@ -67,9 +66,6 @@ export default class LoginScreen extends Component {
             }
         });
     }
-    log = () => {
-        f.auth().signOut();
-    }
     goToForgotPassword = () => {
         this.props.navigation.navigate('FP')
     }
@@ -83,7 +79,11 @@ export default class LoginScreen extends Component {
     }
     renderLogIn() {
         return(
-            <View style = {styles.container}>
+            <View>
+                { this.props.loginStatus === "success" ?(
+                    this.props.navigation.navigate('Home')
+                ):(
+                    <View style = {styles.container}>
                 <View style={styles.InputContainer}>
                     <TextInput
                         style={styles.body}
@@ -134,8 +134,10 @@ export default class LoginScreen extends Component {
                     onPress={() => this.login()} >
                     <Text> Log In</Text>
                 </TouchableOpacity>    
-            </View>    
-    )
+            </View> 
+                )}
+            </View>
+        );  
     }
     
     render() {
