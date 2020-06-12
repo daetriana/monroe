@@ -14,7 +14,6 @@ export async function logIn(payload) {
         .then(function(user) {
             if (user.exists) {
                 alert(' user in in ')
-                console.log(user.data())
                 store.dispatch({
                     type: "DO_LOGIN_SUCCESS", payload: user.data()
             });
@@ -40,7 +39,7 @@ export async function handlePasswordReset(values) {
         alert(error)
     }
 }
- 
+
 connect(store => {
     return {
         user: store.login.user,     

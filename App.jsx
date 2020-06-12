@@ -6,7 +6,7 @@ import material from "./native-base-theme/variables/material";
 import { createStackNavigator } from 'react-navigation-stack';
 import { createAppContainer} from 'react-navigation';
 import LoginScreen from './src/components/screens/login/login';
-import HomeScreen from "./src/components/screens/Home/homeScreen";
+import HomeScreen from "./src/components/screens/Home/homescreen";
 import ForgotPassword from "./src/components/screens/login/resetpassword"
 //import ProfileScreen from './src/components/screens/profileScreen';
 //import TweetDetailsScreen from './src/components/screens/tweetDetails';

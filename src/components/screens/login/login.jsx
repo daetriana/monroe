@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import * as Expo from "expo";
-import { StyleSheet, Dimensions, TextInput, TouchableOpacity, Button } from "react-native";
+import { StyleSheet, Dimensions, TextInput, TouchableOpacity, Button, ActivityIndicator } from "react-native";
 import getTheme from '../../../../native-base-theme/components';
 import platform from "../../../../native-base-theme/variables/platform";
 import material from "../../../../native-base-theme/variables/material";
@@ -31,6 +31,7 @@ import {
 } from "native-base";
 import { setUsername } from '../../../../redux/actions/loginActions';
 import { connect } from "react-redux";
+//import Speedometer from './Speedometer'
 @connect(store => {
     return {
         username: store.login.username,
@@ -42,10 +43,20 @@ import { connect } from "react-redux";
 export default class LoginScreen extends Component {
     constructor(props) {
         super(props);
+        this.state= {
+            loading: true,
+        }
         
     }
     componentDidMount(){
         var user = f.auth().currentUser;
+        var that = this;
+        if(!user){
+            this.setState({loading:false})
+        }else{
+            this.props.navigation.navigate('Home'); 
+        }
+        
     }
     login = () => {
         this.props.dispatch({
@@ -56,18 +67,23 @@ export default class LoginScreen extends Component {
             }
         });
     }
+    log = () => {
+        f.auth().signOut();
+    }
     goToForgotPassword = () => {
-
         this.props.navigation.navigate('FP')
     }
-    
-    render() {
-        if (this.props.loginStatus === "success") {
-            this.props.navigation.navigate('Home');
-        }
+    renderLoading() {
+        return (
+            <View style={styles.container} >
+            
+                <Text> The Divested Space</Text>
+            </View>
+        );
+    }
+    renderLogIn() {
         return(
             <View style = {styles.container}>
-
                 <View style={styles.InputContainer}>
                     <TextInput
                         style={styles.body}
@@ -95,7 +111,7 @@ export default class LoginScreen extends Component {
                         underlineColorAndroid="transparent"
                     />
                 </View> 
-                
+            
                 <View style= {{  alignSelf:'flex-end'}}>
                 {this.props.loginStatus === "ongoing" ? <Spinner /> : null}
                 {this.props.loginStatus === "failed" ? (
@@ -112,105 +128,125 @@ export default class LoginScreen extends Component {
                         
                     /> 
                 </View>
-                
+            
                 <TouchableOpacity
                     style={styles.loginText}
                     onPress={() => this.login()} >
                     <Text> Log In</Text>
-                </TouchableOpacity>  
-        </View>    
-    )}
+                </TouchableOpacity>    
+            </View>    
+    )
+    }
+    
+    render() {
+        return(
+            <View style = {styles.container}>
+                {this.state.loading ? this.renderLoading():(
+                    this.renderLogIn()
+                )}
+            </View> 
+        );
+    }
 }
-
-
 const styles = StyleSheet.create({
-container: {
-flex: 1,
-alignItems:'center',
-justifyContent: 'center', 
-},
-bottom: {
-marginBottom: 36,
-position: 'absolute',
-bottom: 100,
-alignItems:'center',
-justifyContent: 'center', 
-},
-or: { 
-color: "black",
-},
-loginText: {
-color: 'white',
-width: WIDTH -55,
-backgroundColor: '#A5D38D', 
-justifyContent:'center',
-alignItems: 'center',  
-fontWeight: 'bold',
-height: 50,
-marginTop: 20,
-borderRadius: 10
-},
-placeholder: {
-color: "red"
-},
-InputContainer: {
-marginTop: 30,
-borderColor: "grey",
-backgroundColor: '#F7F8F8',
-width : WIDTH -55,
-borderRadius: 10
-},
-body: {
-height: 50,
-paddingLeft: 20,
-paddingRight: 20,
-color: "#696969",
-width: WIDTH -55,
-},
-button : {
-    width: 356,
-    height: 50,
-    backgroundColor: '#A5D38D',
-    borderRadius: 10,
-    justifyContent:'center',
-    alignItems: 'center',
-    margin : 5,
-    marginTop: 5,
-    fontWeight: 'bold'
-},
-email : {
-width: 356,
-height: 57,
-backgroundColor: '#A5D38D',
-borderRadius: 20,
-justifyContent:'center',
-alignItems: 'center',
-margin : 5,
-marginTop: 5,
-fontWeight: 'bold'
-},
-actions : {
-color: 'white'
-}, 
-text :{
-color: 'white',
-textAlign:'center',
-fontSize: 25,
-},
-textBox:{
-borderRadius: 45,
-backgroundColor:'pink',
-width: WIDTH - 50,
-height: 45,
-marginBottom: 10,
-opacity: .6,
-color:'black',
-paddingLeft: 10
+    container: {
+        flex: 1,
+        alignItems:'center',
+        justifyContent: 'center', 
+    },
+    ActivityIndicator:{
+        position: 'absolute',
+        top:0,
+        bottom:0,
+        left:0,
+        right:0,
+        backgroundColor:'black',
+        opacity:0.5,
+        justifyContent:'center'
+    },
 
-},
-forgotPw : {   
-display: 'flex',
-flexDirection: 'column',
-alignContent: 'flex-end'
-}
+    bottom: {
+        marginBottom: 36,
+        position: 'absolute',
+        bottom: 100,
+        alignItems:'center',
+        justifyContent: 'center', 
+    },
+    or: { 
+        color: "black",
+    },
+    loginText: {
+        color: 'white',
+        width: WIDTH -55,
+        backgroundColor: '#A5D38D', 
+        justifyContent:'center',
+        alignItems: 'center',  
+        fontWeight: 'bold',
+        height: 50,
+        marginTop: 20,
+        borderRadius: 10
+    },
+    placeholder: {
+        color: "red"
+    },
+    InputContainer: {
+        marginTop: 30,
+        borderColor: "grey",
+        backgroundColor: '#F7F8F8',
+        width : WIDTH -55,
+        borderRadius: 10
+    },
+    body: {
+        height: 50,
+        paddingLeft: 20,
+        paddingRight: 20,
+        color: "#696969",
+        width: WIDTH -55,
+    },
+    button : {
+        width: 356,
+        height: 50,
+        backgroundColor: '#A5D38D',
+        borderRadius: 10,
+        justifyContent:'center',
+        alignItems: 'center',
+        margin : 5,
+        marginTop: 5,
+        fontWeight: 'bold'
+    },
+    email : {
+        width: 356,
+        height: 57,
+        backgroundColor: '#A5D38D',
+        borderRadius: 20,
+        justifyContent:'center',
+        alignItems: 'center',
+        margin : 5,
+        marginTop: 5,
+        fontWeight: 'bold'
+    },
+    actions : {
+        color: 'white'
+    }, 
+    text :{
+        color: 'white',
+        textAlign:'center',
+        fontSize: 25,
+    },
+    textBox:{
+        borderRadius: 45,
+        backgroundColor:'pink',
+        width: WIDTH - 50,
+        height: 45,
+        marginBottom: 10,
+        opacity: .6,
+        color:'black',
+        paddingLeft: 10
+
+    },
+    forgotPw : {   
+        display: 'flex',
+        flexDirection: 'column',
+        alignContent: 'flex-end'
+    }
 });

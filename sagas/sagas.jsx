@@ -55,8 +55,7 @@ const watchLogin = function* watchLogin() {
     yield takeEvery("DO_LOGIN", function*(action) {   
     yield put({ type: "DO_LOGIN_STARTED" });
     try {
-        const test = yield call(attemptLogin.bind(this, action.payload))
-       // yield put({ type: "DO_LOGIN_SUCCESS", payload: 3 });
+        yield call(attemptLogin.bind(this, action.payload))
     }catch (error) {
         alert(error)
         yield put({ type: "DO_LOGIN_FAILED" });
