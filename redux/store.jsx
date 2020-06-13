@@ -17,6 +17,6 @@ const store = createStore(reducer, applyMiddleware(logger, sagaMiddleware));
 
 sagaMiddleware.run(rootSaga);
 // const action = type => store.dispatch({ type });
-console.log(store.getState())
+
 
 export default store;

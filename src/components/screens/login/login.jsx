@@ -52,6 +52,7 @@ export default class LoginScreen extends Component {
         var that = this;
         if(!user){
             this.setState({loading:false})
+            alert('no user in')
         }else{
             this.props.navigation.navigate('Home'); 
         }
