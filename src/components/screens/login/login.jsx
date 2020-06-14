@@ -49,14 +49,14 @@ export default class LoginScreen extends Component {
     }
     componentDidMount(){
         var user = f.auth().currentUser;
-        var that = this;
         if(!user){
+            alert('out')
             this.setState({loading:false})
-            alert('no user in')
         }else{
-            this.props.navigation.navigate('Home'); 
+            alert('in')
+            this.props.navigation.navigate('Home')
         }
-        
+        this.setState({loading:false})
     }
     login = () => {
         this.props.dispatch({
@@ -73,7 +73,6 @@ export default class LoginScreen extends Component {
     renderLoading() {
         return (
             <View style={styles.container} >
-            
                 <Text> The Divested Space</Text>
             </View>
         );
@@ -144,7 +143,7 @@ export default class LoginScreen extends Component {
     render() {
         return(
             <View style = {styles.container}>
-                {this.state.loading ? this.renderLoading():(
+                {this.state.loading ?this.renderLoading():(
                     this.renderLogIn()
                 )}
             </View> 

@@ -15,11 +15,13 @@ import {
     Label,
     Footer,
     FooterTab,
-    Spinner, View
+    Spinner, View, 
 } from "native-base";
+const {width: WIDTH } = Dimensions.get('window');
 import { connect } from "react-redux";
+import {f} from '../../../../utils/config'
 import {
-    StyleSheet,
+    StyleSheet,Dimensions, TouchableOpacity,
     AppState
 } from 'react-native';
 @connect(store => {
@@ -54,6 +56,13 @@ export default class HomeScreen extends Component {
         return(
             <View style = {styles.container}>
                 <Text> HomeScreen</Text>
+                <TouchableOpacity style = {styles.logOuText}
+                onPress = {()=>{
+                    f.auth().signOut();
+                    this.props.navigation.navigate('Login')
+                }}>
+                    <Text> SIGN OUT</Text>
+                </TouchableOpacity>
             </View>
     )}
 }
@@ -61,6 +70,17 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         alignItems: 'center',
-        justifyContent: 'center',
-    }
+        justifyContent: 'center', 
+    },
+    logOuText: {
+        color: 'white',
+        width: WIDTH -55,
+        backgroundColor: '#A5D38D', 
+        justifyContent:'center',
+        alignItems: 'center',  
+        fontWeight: 'bold',
+        height: 50,
+        marginTop: 20,
+        borderRadius: 10
+    },
 });

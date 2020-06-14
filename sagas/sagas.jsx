@@ -1,12 +1,17 @@
 import { put, takeEvery, all, call } from "redux-saga/effects";
 import axios from "axios";
 import faker from "faker";
-import {f, database} from '../utils/config'
-import {logIn, fetchTweetss} from '../utils/apiCalls'
+import {logIn, getTweets} from '../utils/apiCalls'
 
 const fetchTweets = function* fetchTweets() {
+    console.log("into fetch tweets saga");
     yield put({ type: "FETCH_TWEETS_STARTED" });
-    fetchTweetss();
+    try {
+        const tweets = yield call(fetchTweetsData);
+        yield put({ type: "FETCH_TWEETS_FULFILLED", payload: tweets });
+    } catch (error) {
+        yield put({ type: "FETCH_TWEETS_REJECTED", payload: error });
+    }
 };
 
 const watchFetchTweets = function* watchFetchTweets() {
@@ -14,7 +19,6 @@ const watchFetchTweets = function* watchFetchTweets() {
 };
 
 const fetchUserTweets = function* fetchUserTweets() {
-    //temporary implementation. Take username/userID and fetch tweets accordingly
         yield put({ type: "FETCH_USER_TWEETS_STARTED" });
     try {
         const tweets = yield call(fetchUserTweetsData);
@@ -44,17 +48,20 @@ const watchSetPassword = function* watchSetPassword() {
     yield takeEvery("SET_PASSWORD", setPassword);
 };
 
-const watchLogin = function* watchLogin() {
-    yield takeEvery("DO_LOGIN", function*(action) {   
-    yield put({ type: "DO_LOGIN_STARTED" });
-    try {
-        yield call(attemptLogin.bind(this, action.payload))
-    }catch (error) {
-        alert(error)
-        yield put({ type: "DO_LOGIN_FAILED" });
-    }
-});
+const watchLogin = function*  watchLogin() {
+    yield takeEvery("DO_LOGIN", function*(action) {
+        yield put({ type: "DO_LOGIN_STARTED" });
+        try {
+            const loginData =  call(attemptLogin.bind(this, action.payload));
+            if ( loginData)            
+                yield put({ type: "DO_LOGIN_SUCCESS", payload: loginData });
+            else yield put({ type: "DO_LOGIN_FAILED" });
+        } catch (error) {
+            yield put({ type: "DO_LOGIN_FAILED" });
+        }
+    });
 };
+
 
 const watchPostTweet = function* watchPostTweet() {
     yield takeEvery("POST_TWEET", function*(action) {
@@ -102,8 +109,8 @@ const rootSaga = function* rootSaga() {
 
 export default rootSaga;
 
-const fetchTweetsData = () => {
-    fetchTweets();
+const fetchTweetsData = async () => {
+    return await getTweets();
 };
 
 const fetchTweetRepliesData = () => {
@@ -120,8 +127,9 @@ const fetchUserTweetsData = () => {
     });
 };
 
-const attemptLogin = payload => {
-    logIn(payload)
+const attemptLogin = async (payload )=>{
+    return await logIn(payload);
+    
 };
 
 const postTweet = payload => {
