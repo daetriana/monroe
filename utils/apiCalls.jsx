@@ -39,8 +39,15 @@ export function getTweets(){
     var tweets = [];
     return  f.firestore().collection("tweets").get().then((querySnapshot) => {
         querySnapshot.forEach((doc) => {
-            tweets.push(doc.data())
-        });
+            tweets.push({
+                    id:doc.data().id,
+                    user : doc.data().user,
+                    tweetContent: doc.data().tweetContent,
+                    likes: doc.data().likes,
+                    retweets: doc.data().retweets,
+                    replies: doc.data().replies
+                })
+            });
         return tweets;
     }).catch(err =>{
         alert(err)

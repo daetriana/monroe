@@ -1,32 +1,11 @@
 import React, { Component } from 'react'
 import * as Expo from "expo";
-import { StyleSheet, Dimensions, TextInput, TouchableOpacity, Button, ActivityIndicator } from "react-native";
-import getTheme from '../../../../native-base-theme/components';
-import platform from "../../../../native-base-theme/variables/platform";
-import material from "../../../../native-base-theme/variables/material";
-import { NavigationActions } from "react-navigation";
+import { StyleSheet, Dimensions, TextInput, TouchableOpacity, Button, ActivityIndicator, ImageBackground } from "react-native";
+import image from '../../../../assets/splash.png'
 import {f} from '../../../../utils/config';
-const {width: WIDTH } = Dimensions.get('window');
+import styles from './loginStyles' 
 import {
-    Container,
     Text,
-    Header,
-    Left,
-    Body,
-    Right,
-    Icon,
-    Title,
-    StyleProvider,
-    Content,
-    Grid,
-    Col,
-    Row,
-    Input,
-    Item,
-    Form,
-    Label,
-    Footer,
-    FooterTab,
     Spinner, View
 } from "native-base";
 import { setUsername } from '../../../../redux/actions/loginActions';
@@ -50,10 +29,8 @@ export default class LoginScreen extends Component {
     componentDidMount(){
         var user = f.auth().currentUser;
         if(!user){
-            alert('out')
-            this.setState({loading:false})
+            this.setState({loading:true})
         }else{
-            alert('in')
             this.props.navigation.navigate('Home')
         }
         this.setState({loading:false})
@@ -72,8 +49,10 @@ export default class LoginScreen extends Component {
     }
     renderLoading() {
         return (
-            <View style={styles.container} >
-                <Text> The Divested Space</Text>
+            <View style = {styles.container} >       
+                <ImageBackground source = {image} style={styles.image}>
+                    <Text style = {styles.text}> The Divested Space</Text>
+                </ImageBackground>
             </View>
         );
     }
@@ -84,6 +63,7 @@ export default class LoginScreen extends Component {
                     this.props.navigation.navigate('Home')
                 ):(
                     <View style = {styles.container}>
+                        <Text style = {styles.text}> The Divested Space</Text>
                 <View style={styles.InputContainer}>
                     <TextInput
                         style={styles.body}
@@ -143,112 +123,10 @@ export default class LoginScreen extends Component {
     render() {
         return(
             <View style = {styles.container}>
-                {this.state.loading ?this.renderLoading():(
+                {this.state.loading ? this.renderLoading():(
                     this.renderLogIn()
                 )}
             </View> 
         );
     }
 }
-const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-        alignItems:'center',
-        justifyContent: 'center', 
-    },
-    ActivityIndicator:{
-        position: 'absolute',
-        top:0,
-        bottom:0,
-        left:0,
-        right:0,
-        backgroundColor:'black',
-        opacity:0.5,
-        justifyContent:'center'
-    },
-
-    bottom: {
-        marginBottom: 36,
-        position: 'absolute',
-        bottom: 100,
-        alignItems:'center',
-        justifyContent: 'center', 
-    },
-    or: { 
-        color: "black",
-    },
-    loginText: {
-        color: 'white',
-        width: WIDTH -55,
-        backgroundColor: '#A5D38D', 
-        justifyContent:'center',
-        alignItems: 'center',  
-        fontWeight: 'bold',
-        height: 50,
-        marginTop: 20,
-        borderRadius: 10
-    },
-    placeholder: {
-        color: "red"
-    },
-    InputContainer: {
-        marginTop: 30,
-        borderColor: "grey",
-        backgroundColor: '#F7F8F8',
-        width : WIDTH -55,
-        borderRadius: 10
-    },
-    body: {
-        height: 50,
-        paddingLeft: 20,
-        paddingRight: 20,
-        color: "#696969",
-        width: WIDTH -55,
-    },
-    button : {
-        width: 356,
-        height: 50,
-        backgroundColor: '#A5D38D',
-        borderRadius: 10,
-        justifyContent:'center',
-        alignItems: 'center',
-        margin : 5,
-        marginTop: 5,
-        fontWeight: 'bold'
-    },
-    email : {
-        width: 356,
-        height: 57,
-        backgroundColor: '#A5D38D',
-        borderRadius: 20,
-        justifyContent:'center',
-        alignItems: 'center',
-        margin : 5,
-        marginTop: 5,
-        fontWeight: 'bold'
-    },
-    actions : {
-        color: 'white'
-    }, 
-    text :{
-        color: 'white',
-        textAlign:'center',
-        fontSize: 25,
-    },
-    textBox:{
-        borderRadius: 45,
-        backgroundColor:'pink',
-        width: WIDTH - 50,
-        height: 45,
-        marginBottom: 10,
-        opacity: .6,
-        color:'black',
-        paddingLeft: 10
-
-    },
-    forgotPw : {   
-        display: 'flex',
-        flexDirection: 'column',
-        alignContent: 'flex-end'
-    }
-});
